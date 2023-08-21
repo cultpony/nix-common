@@ -1,0 +1,100 @@
+# contains only very common config for everything
+{ config
+, pkgs
+, flake-args
+, backup_repository
+, backup_repository_key
+, ... }:
+{
+  imports = [
+    ./no-rsa-ssh-hostkey.nix
+    ./cachix.nix
+    ./restic_noprune.nix
+    ./hardware/zfs.nix
+  ];
+
+  nix.settings.allowed-users = [ "@wheel" ];
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nixpkgs.config.allowUnfree = true;
+  # nix.extraOptions = ''!include ${config.age.secrets.github_pulltoken.path}'';
+  system.autoUpgrade = {
+    enable = false;
+    allowReboot = true;
+    persistent = true;
+    flake = "github:cultpony/nix";
+    dates = "05:40 UTC";
+  };
+  boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+
+  programs.ssh.extraConfig = ''
+    StrictHostKeyChecking accept-new
+    Host github.com
+      IdentityFile /etc/ssh/ssh_host_ed25519_key
+      User git
+  '';
+  programs.ssh.knownHosts."github.com".publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl";
+
+  # This is a bit silly for everything
+  #nix.gc.automatic = true;
+
+  # Set your time zone.
+  time.timeZone = "Europe/Berlin";
+  i18n.defaultLocale = "de_DE.UTF-8";
+  i18n.supportedLocales = [ "C.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8" ];
+
+  environment.systemPackages = with pkgs; [
+    wget
+    curl
+    nano
+    htop
+    unzip
+    tmux
+    pam_ssh_agent_auth
+    jq
+    sudo
+    cachix
+    gdu
+    unixtools.xxd
+  ];
+
+  programs.git = {
+    enable = true;
+    lfs.enable = true;
+  };
+
+  services.journald.extraConfig = builtins.concatStringsSep "\n" [
+    "MaxRetentionSec=10day"
+  ];
+
+  security.sudo.execWheelOnly = true;
+  
+  # Enable the OpenSSH daemon.
+  services.openssh = {
+    enable = true;
+  } // (if config.system.nixos.release == "22.11" then {
+    passwordAuthentication = false;
+    kbdInteractiveAuthentication = false;
+    permitRootLogin = "prohibit-password";
+    extraConfig = ''
+      AllowTcpForwarding yes
+      X11Forwarding no
+      AllowAgentForwarding yes
+      AllowStreamLocalForwarding no
+      AuthenticationMethods publickey
+    '';
+  } else {
+    settings = {
+      PermitRootLogin = "prohibit-password";
+      PasswordAuthentication = false;
+      KbdInteractiveAuthentication = false;
+    };
+    extraConfig = ''
+      AllowTcpForwarding yes
+      X11Forwarding no
+      AllowAgentForwarding yes
+      AllowStreamLocalForwarding no
+      AuthenticationMethods publickey
+    '';
+  });
+
+}

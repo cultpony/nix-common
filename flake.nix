@@ -1,0 +1,54 @@
+{
+  inputs = {
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    systems.url = "github:nix-systems/default-linux";
+    flake-utils.url = "github:numtide/flake-utils";
+    flake-utils.inputs.systems.follows = "systems";
+    agenix.url = "github:ryantm/agenix";
+    agenix.inputs.nixpkgs.follows = "nixpkgs";
+    cachix.url = "github:cachix/cachix/v1.5";
+  };
+
+  outputs = inputs@ { self, nixpkgs, flake-utils, ... }: flake-utils.lib.eachDefaultSystem (system: {
+    devShells.default = (import nixpkgs rec {
+      inherit system;
+      config.allowUnfree = true;
+    }).mkShell {
+      buildInputs = with inputs.nixpkgs.legacyPackages.${system}; [
+        inputs.agenix.packages.${system}.default
+        inputs.cachix.packages.${system}.default
+        nix-output-monitor
+      ];
+    };
+
+    packages.hydrus = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
+      python3Packages.callPackage ./hydrus.nix {
+        inherit miniupnpc swftools;
+        inherit (qt6) wrapQtAppsHook qtbase qtcharts;
+      }
+    );
+    packages.monero-feather = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
+      callPackage ./monero-feather.nix {}
+    );
+  }) // {
+    lib = {
+      cachix = import ./cachix.nix;
+      cultpony_ssh_keys = import ./cultpony_ssh_keys.nix;
+      common_setup = import ./common_setup.nix;
+      gen_common = import ./gen_common.nix;
+      no-rsa-ssh-hostkey = import ./no-rsa-ssh-hostkey.nix;
+      pgbackrest = import ./pgbackrest.nix;
+      restic_noprune = import ./restic_noprune.nix;
+      rustic = import ./rustic.nix;
+      mixins = {
+        nginx = import ./nginx.nix;
+        server-common = import ./server-common.nix;
+        systemd-boot = import ./systemd-boot.nix;
+        trusted-nix-caches = import ./trusted-nix-caches.nix;
+      };
+      desktop = {
+        default = import ./default.nix;
+      };
+    };
+  };
+}
