@@ -10,7 +10,6 @@
     ./no-rsa-ssh-hostkey.nix
     ./cachix.nix
     ./restic_noprune.nix
-    ./hardware/zfs.nix
   ];
 
   nix.settings.allowed-users = [ "@wheel" ];
@@ -25,6 +24,10 @@
     dates = "05:40 UTC";
   };
   boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
+
+  services.udev.extraRules = ''
+    ACTION=="add|change", KERNEL=="sd[a-z]*[0-9]*|mmcblk[0-9]*p[0-9]*|nvme[0-9]*n[0-9]*p[0-9]*", ENV{ID_FS_TYPE}=="zfs_member", ATTR{../queue/scheduler}="none"
+  '';
 
   programs.ssh.extraConfig = ''
     StrictHostKeyChecking accept-new
