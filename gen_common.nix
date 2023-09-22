@@ -64,9 +64,9 @@
     nano
     htop
     unzip
-    tmux.overrideAttrs (old: {
+    (tmux.overrideAttrs (old: {
       configureFlags = old.configureFlags ++ [ "--enable-sixel" ];
-    })
+    }))
     pam_ssh_agent_auth
     jq
     sudo
