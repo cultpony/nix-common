@@ -76,7 +76,7 @@ args@{ config
     gdu
     unixtools.xxd
     pkgs.unstable.wezterm.terminfo
-    pkgs.unstable.wezterm.wezterm-mux-server
+    pkgs.unstable.wezterm
   ];
 
   programs.git = {
