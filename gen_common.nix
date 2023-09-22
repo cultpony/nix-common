@@ -1,6 +1,7 @@
 # contains only very common config for everything
 { config
 , pkgs
+, pkgs-unstable
 , flake-args
 , backup_repository
 , backup_repository_key
@@ -73,7 +74,8 @@
     cachix
     gdu
     unixtools.xxd
-    wezterm.terminfo
+    pkgs-unstable.wezterm.terminfo
+    pkgs-unstable.wezterm.wezterm-mux-server
   ];
 
   programs.git = {
