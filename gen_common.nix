@@ -1,5 +1,5 @@
 # contains only very common config for everything
-{ config
+args@{ config
 , pkgs
 , flake-args
 , backup_repository
@@ -12,7 +12,7 @@
     ./restic_noprune.nix
   ];
 
-  nixpkgs.overlays = flake-args.overlays;
+  nixpkgs.overlays = args.overlays;
 
   nix.settings.allowed-users = [ "@wheel" ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
