@@ -12,6 +12,8 @@
     ./restic_noprune.nix
   ];
 
+  nixpkgs.overlays = flake-args.overlays;
+
   nix.settings.allowed-users = [ "@wheel" ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nixpkgs.config.allowUnfree = true;
