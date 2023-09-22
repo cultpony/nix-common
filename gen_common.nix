@@ -45,13 +45,28 @@
   i18n.defaultLocale = "de_DE.UTF-8";
   i18n.supportedLocales = [ "C.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" "de_DE.UTF-8/UTF-8" ];
 
+  environment.etc."tmux.conf" = {
+    text = ''
+      set -g mouse on
+      setw -g history-limit 50000
+      set-window-option -g automatic-rename on
+      set-option -g set-titles on
+      set-option -g allow-passthrough on
+    '';
+    mode = "644";
+    user = "root";
+    group = "root";
+  };
+
   environment.systemPackages = with pkgs; [
     wget
     curl
     nano
     htop
     unzip
-    tmux
+    tmux.overrideAttrs (old: {
+      configureFlags = old.configureFlags ++ [ "--enable-sixel" ];
+    })
     pam_ssh_agent_auth
     jq
     sudo

@@ -16,15 +16,6 @@
   #zramSwap.enable = true;
   networking.proxy.noProxy = "127.0.0.1,localhost";
 
-  environment.etc."tmux.conf" = {
-    text = ''
-      set -g mouse on
-    '';
-    mode = "644";
-    user = "root";
-    group = "root";
-  };
-
   security = {
     acme = {
       acceptTerms = true;
