@@ -58,6 +58,7 @@
     cachix
     gdu
     unixtools.xxd
+    wezterm.terminfo
   ];
 
   programs.git = {
