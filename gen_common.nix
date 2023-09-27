@@ -4,6 +4,7 @@ args@{ config
 , flake-args
 , backup_repository
 , backup_repository_key
+, unstable ? pkgs.unstable
 , ... }:
 {
   imports = [
@@ -75,8 +76,8 @@ args@{ config
     cachix
     gdu
     unixtools.xxd
-    pkgs.unstable.wezterm.terminfo
-    pkgs.unstable.wezterm
+    unstable.wezterm.terminfo
+    unstable.wezterm
   ];
 
   programs.git = {
