@@ -4,7 +4,7 @@ args@{ config
 , flake-args
 , backup_repository
 , backup_repository_key
-, unstable ? pkgs.unstable
+, unstable
 , ... }:
 {
   imports = [
