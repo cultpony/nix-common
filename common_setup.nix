@@ -3,6 +3,8 @@
 , rootPasswordFile
 , backup_repository
 , backup_repository_key
+, pkgs
+, unstable ? pkgs.unstable
 , ...
 }:
 {
