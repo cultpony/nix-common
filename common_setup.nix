@@ -1,4 +1,4 @@
-{ config
+args@{ config
 , acmeEmail 
 , rootPasswordFile
 , backup_repository
@@ -8,7 +8,10 @@
 , ...
 }:
 {
-  imports = [ ./gen_common.nix ];
+  imports = [ (import ./gen_common.nix (args // {
+    inherit pkgs;
+    inherit unstable;
+  })) ];
 
   age = {
     secrets = {
