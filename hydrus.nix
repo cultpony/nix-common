@@ -12,15 +12,20 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "542";
+  version = "545";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CGa6u858t+Be9VGv8RTl4D0FX+fcafN/Xevy2hv52II=";
+    hash = "sha256-AJOE2RZx+H2jwCKuLq8kxi8sxxoR6YHv9yT5c/1l8fo=";
   };
+
+  patches = [
+    # Nixpkgs specific, can be removed if upstream makes a more reasonable check
+    ./patches/0001-inform-nixpkgs.patch
+  ];
 
   nativeBuildInputs = [
     wrapQtAppsHook
@@ -37,12 +42,14 @@ python3Packages.buildPythonPackage rec {
     cbor2
     chardet
     cloudscraper
+    dateparser
     html5lib
     lxml
     lz4
     numpy
     opencv4
     pillow
+    pillow-heif
     psutil
     psd-tools
     pympler
@@ -101,6 +108,9 @@ python3Packages.buildPythonPackage rec {
     # Move the hydrus module and related directories
     mkdir -p $out/${python3Packages.python.sitePackages}
     mv {hydrus,static} $out/${python3Packages.python.sitePackages}
+    # Fix random files being marked with execute permissions
+    chmod -x $out/${python3Packages.python.sitePackages}/static/*.{png,svg,ico}
+    # Build docs
     mkdocs build -d help
     mv help $out/doc/
 

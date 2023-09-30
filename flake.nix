@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     systems.url = "github:nix-systems/default-linux";
     flake-utils.url = "github:numtide/flake-utils";
     flake-utils.inputs.systems.follows = "systems";
@@ -21,15 +22,18 @@
       ];
     };
 
-    packages.hydrus = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
-      python3Packages.callPackage ./hydrus.nix {
-        inherit miniupnpc swftools;
-        inherit (qt6) wrapQtAppsHook qtbase qtcharts;
-      }
-    );
+    packages.hydrus = let pkgs = inputs.nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
+        python3Packages.callPackage ./hydrus.nix {
+          inherit miniupnpc swftools;
+          inherit (qt6) wrapQtAppsHook qtbase qtcharts;
+        }
+      );
     packages.monero-feather = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
       callPackage ./monero-feather.nix {}
     );
+
+    checks.test-hydrus = self.packages.${system}.hydrus;
+    checks.monero-feather = self.packages.${system}.monero-feather;
   }) // {
     lib = {
       cachix = import ./cachix.nix;
