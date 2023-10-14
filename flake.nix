@@ -8,9 +8,10 @@
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     cachix.url = "github:cachix/cachix/v1.5";
+    zon2nix.url = "github:nix-community/zon2nix";
   };
 
-  outputs = inputs@ { self, nixpkgs, flake-utils, ... }: flake-utils.lib.eachDefaultSystem (system: {
+  outputs = inputs@ { self, nixpkgs, nixpkgs-unstable, flake-utils, ... }: flake-utils.lib.eachDefaultSystem (system: {
     devShells.default = (import nixpkgs rec {
       inherit system;
       config.allowUnfree = true;
@@ -18,7 +19,9 @@
       buildInputs = with inputs.nixpkgs.legacyPackages.${system}; [
         inputs.agenix.packages.${system}.default
         inputs.cachix.packages.${system}.default
+        inputs.zon2nix.packages.${system}.default
         nix-output-monitor
+        zig
       ];
     };
 
@@ -31,9 +34,15 @@
     packages.monero-feather = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
       callPackage ./monero-feather.nix {}
     );
+    #packages.pixi = let pkgs = import nixpkgs-unstable {
+    #  inherit system;
+    #}; in with pkgs; (
+    #  callPackage ./pixi.nix {}
+    #);
 
     checks.test-hydrus = self.packages.${system}.hydrus;
     checks.monero-feather = self.packages.${system}.monero-feather;
+    #checks.pixi = self.packages.${system}.pixi;
   }) // {
     lib = {
       cachix = import ./cachix.nix;

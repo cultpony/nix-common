@@ -17,7 +17,6 @@ args@{ config
 
   nix.settings.allowed-users = [ "@wheel" ];
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nixpkgs.config.allowUnfree = true;
   # nix.extraOptions = ''!include ${config.age.secrets.github_pulltoken.path}'';
   system.autoUpgrade = {
     enable = false;
