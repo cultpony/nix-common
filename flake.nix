@@ -34,6 +34,9 @@
     packages.monero-feather = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
       callPackage ./monero-feather.nix {}
     );
+    packages.mastodon = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
+      callPackage ./mastodon-pkg/default.nix {}
+    );
     #packages.pixi = let pkgs = import nixpkgs-unstable {
     #  inherit system;
     #}; in with pkgs; (
@@ -53,6 +56,7 @@
       pgbackrest = import ./pgbackrest.nix;
       restic_noprune = import ./restic_noprune.nix;
       rustic = import ./rustic.nix;
+      mastodon = import ./mastodon.nix;
       mixins = {
         nginx = import ./nginx.nix;
         server-common = import ./server-common.nix;
