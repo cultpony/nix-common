@@ -2,52 +2,48 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
-    #systems.url = "github:nix-systems/default-linux";
     flake-utils.url = "github:numtide/flake-utils";
-    #flake-utils.inputs.systems.follows = "systems";
     agenix.url = "github:ryantm/agenix";
     agenix.inputs.nixpkgs.follows = "nixpkgs";
     cachix.url = "github:cachix/cachix/v1.5";
     zon2nix.url = "github:nix-community/zon2nix";
   };
 
-  outputs = inputs@ { self, nixpkgs, nixpkgs-unstable, flake-utils, ... }: flake-utils.lib.eachDefaultSystem (system: {
-    devShells.default = (import nixpkgs rec {
-      inherit system;
-      config.allowUnfree = true;
-    }).mkShell {
-      buildInputs = with inputs.nixpkgs.legacyPackages.${system}; [
-        inputs.agenix.packages.${system}.default
-        inputs.cachix.packages.${system}.default
-        inputs.zon2nix.packages.${system}.default
-        nix-output-monitor
-        zig
-      ];
-    };
+  outputs = inputs@ { self, systems, nixpkgs, nixpkgs-unstable, flake-utils, ... }: flake-utils.lib.eachDefaultSystem
+    (system: {
+      devShells.default = (import nixpkgs rec {
+        inherit system;
+        config.allowUnfree = true;
+      }).mkShell {
+        buildInputs = with nixpkgs.legacyPackages.${system}; [
+          inputs.agenix.packages.${system}.default
+          inputs.cachix.packages.${system}.default
+          inputs.zon2nix.packages.${system}.default
+          nix-output-monitor
+          zig
+        ];
+      };
 
-    packages.hydrus = let pkgs = inputs.nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
+      packages.hydrus = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
         python3Packages.callPackage ./hydrus.nix {
           inherit miniupnpc swftools;
           inherit (qt6) wrapQtAppsHook qtbase qtcharts;
         }
       );
-    packages.monero-feather = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
-      callPackage ./monero-feather.nix {}
-    );
+    }) //
+  flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system: {
     packages.mastodon = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
-      callPackage ./mastodon-pkg/default.nix {}
+      callPackage ./mastodon-pkg/default.nix { }
     );
-    #packages.pixi = let pkgs = import nixpkgs-unstable {
-    #  inherit system;
-    #}; in with pkgs; (
-    #  callPackage ./pixi.nix {}
-    #);
+    packages.monero-feather = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
+      callPackage ./monero-feather.nix { }
+    );
 
-    checks."test-hydrus-${system}" = self.packages.${system}.hydrus;
-    checks."monero-feather-${system}" = self.packages.${system}.monero-feather;
-    checks."mastodon-${system}" = self.packages.${system}.mastodon;
-    #checks.pixi = self.packages.${system}.pixi;
-  }) // {
+    checks.test-hydrus = self.packages.${system}.hydrus;
+    checks.monero-feather = self.packages.${system}.monero-feather;
+    checks.mastodon = self.packages.${system}.mastodon;
+  }) //
+  {
     lib = {
       cachix = import ./cachix.nix;
       cultpony_ssh_keys = import ./cultpony_ssh_keys.nix;
