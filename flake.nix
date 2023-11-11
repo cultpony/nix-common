@@ -43,8 +43,9 @@
     #  callPackage ./pixi.nix {}
     #);
 
-    checks.test-hydrus = self.packages.${system}.hydrus;
-    checks.monero-feather = self.packages.${system}.monero-feather;
+    checks."test-hydrus-${system}" = self.packages.${system}.hydrus;
+    checks."monero-feather-${system}" = self.packages.${system}.monero-feather;
+    checks."mastodon-${system}" = self.packages.${system}.mastodon;
     #checks.pixi = self.packages.${system}.pixi;
   }) // {
     lib = {
