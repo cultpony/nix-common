@@ -179,7 +179,7 @@ stdenv.mkDerivation rec {
     description = "Self-hosted, globally interconnected microblogging software based on ActivityPub";
     homepage = "https://joinmastodon.org";
     license = licenses.agpl3Plus;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "aarch64-apple-darwin" "aarch64-darwin" ];
     maintainers = with maintainers; [ happy-river erictapen izorkin ghuntley ];
   };
 }
