@@ -30,6 +30,7 @@
           inherit (qt6) wrapQtAppsHook qtbase qtcharts;
         }
       );
+      checks.test-hydrus = self.packages.${system}.hydrus;
     }) //
   flake-utils.lib.eachSystem [ "x86_64-linux" "aarch64-linux" ] (system: {
     packages.mastodon = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
@@ -39,7 +40,6 @@
       callPackage ./monero-feather.nix { }
     );
 
-    checks.test-hydrus = self.packages.${system}.hydrus;
     checks.monero-feather = self.packages.${system}.monero-feather;
     checks.mastodon = self.packages.${system}.mastodon;
   }) //
