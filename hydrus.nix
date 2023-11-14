@@ -19,7 +19,7 @@ python3Packages.buildPythonPackage rec {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "";
+    hash = "sha256-P/U44ndfucbRnwGLdSnnA0VE4K40zPz3wtNpQj8rh5Q=";
   };
 
   patches = [
