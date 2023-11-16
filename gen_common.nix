@@ -13,6 +13,9 @@ args@{ config
     ./restic_noprune.nix
   ];
 
+  nix.settings.substituters = [ "https://cache.garnix.io" ];
+  nix.settings.trusted-public-keys = [ "cache.garnix.io:CTFPyKSLcx5RMJKfLo5EEPUObbA78b0YQ2DTCJXqr9g=" ];
+
   nixpkgs.overlays = args.overlays;
 
   nix.settings.allowed-users = [ "@wheel" ];
