@@ -22,7 +22,7 @@ pythonVPackages.buildPythonPackage rec {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "";
+    hash = "sha256-B2s2TjkDLC9Sn2ggUiktocbmGjoiNVlMrozjaRv9Gys=";
   };
 
   patches = [
