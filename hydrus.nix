@@ -5,21 +5,24 @@
 , ffmpeg
 , enableSwftools ? false
 , swftools
-, python3Packages
+, python311Packages
 , qtbase
 , qtcharts
 }:
 
-python3Packages.buildPythonPackage rec {
+let
+  pythonVPackages = python311Packages;
+in
+pythonVPackages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "551";
+  version = "551a";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-P/U44ndfucbRnwGLdSnnA0VE4K40zPz3wtNpQj8rh5Q=";
+    hash = "";
   };
 
   patches = [
@@ -29,7 +32,7 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = [
     wrapQtAppsHook
-    python3Packages.mkdocs-material
+    pythonVPackages.mkdocs-material
   ];
 
   buildInputs = [
@@ -37,7 +40,7 @@ python3Packages.buildPythonPackage rec {
     qtcharts
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with pythonVPackages; [
     beautifulsoup4
     cbor2
     chardet
@@ -58,7 +61,7 @@ python3Packages.buildPythonPackage rec {
     pyqt6-charts
     pysocks
     python-dateutil
-    python3Packages.mpv
+    pythonVPackages.mpv
     pyyaml
     qtpy
     requests
@@ -67,7 +70,7 @@ python3Packages.buildPythonPackage rec {
     twisted
   ];
 
-  nativeCheckInputs = with python3Packages; [
+  nativeCheckInputs = with pythonVPackages; [
     nose
     mock
     httmock
@@ -106,10 +109,10 @@ python3Packages.buildPythonPackage rec {
 
   installPhase = ''
     # Move the hydrus module and related directories
-    mkdir -p $out/${python3Packages.python.sitePackages}
-    mv {hydrus,static} $out/${python3Packages.python.sitePackages}
+    mkdir -p $out/${pythonVPackages.python.sitePackages}
+    mv {hydrus,static} $out/${pythonVPackages.python.sitePackages}
     # Fix random files being marked with execute permissions
-    chmod -x $out/${python3Packages.python.sitePackages}/static/*.{png,svg,ico}
+    chmod -x $out/${pythonVPackages.python.sitePackages}/static/*.{png,svg,ico}
     # Build docs
     mkdocs build -d help
     mv help $out/doc/
@@ -119,11 +122,11 @@ python3Packages.buildPythonPackage rec {
     install -m0755 hydrus_server.py $out/bin/hydrus-server
     install -m0755 hydrus_client.py $out/bin/hydrus-client
   '' + lib.optionalString enableSwftools ''
-    mkdir -p $out/${python3Packages.python.sitePackages}/bin
+    mkdir -p $out/${pythonVPackages.python.sitePackages}/bin
     # swfrender seems to have to be called sfwrender_linux
     # not sure if it can be loaded through PATH, but this is simpler
     # $out/python3Packages.python.sitePackages/bin is correct NOT .../hydrus/bin
-    ln -s ${swftools}/bin/swfrender $out/${python3Packages.python.sitePackages}/bin/swfrender_linux
+    ln -s ${swftools}/bin/swfrender $out/${pythonVPackages.python.sitePackages}/bin/swfrender_linux
   '';
 
   dontWrapQtApps = true;
