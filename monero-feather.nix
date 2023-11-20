@@ -66,8 +66,6 @@ stdenv.mkDerivation rec {
 
     libgcrypt
     libsodium
-    libudev0-shim
-    libunwind
     libusb1
     libzip
     hidapi
