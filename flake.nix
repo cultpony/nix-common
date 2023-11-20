@@ -34,10 +34,10 @@
         overlays = [
           (final: prev: {
             pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-              pyqt6 = python-super.python311Packages.pyqt6.overrideAttrs (old: {
+              (final: prev: { pyqt6 = python-super.python311Packages.pyqt6.overrideAttrs (old: {
                 # fix build with qt 6.6
                 env.NIX_CFLAGS_COMPILE = "-fpermissive";
-              });
+              })});
             ];
           })
         ];
