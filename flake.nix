@@ -37,7 +37,7 @@
               packageOverrides = python-final: python-prev: {
                 pyqt6 = python-prev.pyqt6.overrideAttrs (old: {
                   # fix build with qt 6.6
-                  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+                  NIX_CFLAGS_COMPILE = "-fpermissive";
                 });
               };
             };
@@ -47,7 +47,7 @@
               (python-final: python-prev: {
                 pyqt6 = python-prev.pyqt6.overrideAttrs (old: {
                   # fix build with qt 6.6
-                  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+                  NIX_CFLAGS_COMPILE = "-fpermissive";
                 });
               })
             ];
