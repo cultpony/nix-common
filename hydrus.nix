@@ -5,24 +5,24 @@
 , ffmpeg
 , enableSwftools ? false
 , swftools
-, python311Packages
+, pythonPackages
 , qtbase
 , qtcharts
 }:
 
 let
-  pythonVPackages = python311Packages;
+  pythonVPackages = pythonPackages;
 in
 pythonVPackages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "551a";
+  version = "552a";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-B2s2TjkDLC9Sn2ggUiktocbmGjoiNVlMrozjaRv9Gys=";
+    hash = "sha256-Mb6/pmbn1Qwid5kOCMzqg0GJAK8/DdGbqkDh8kHJt7U=";
   };
 
   patches = [

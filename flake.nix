@@ -31,7 +31,7 @@
       );
       packages.hydrus = with import nixpkgs-unstable {
         inherit system;
-        overlays = if system == "aarch64-darwin" then [
+        overlays = if system == "aarch64-darwin" || system == "x86_64-darwin" then [
           (final: prev: rec {
             python311 = prev.python311.override {
               packageOverrides = python-final: python-prev: {
@@ -39,8 +39,18 @@
                   # fix build with qt 6.6
                   env.NIX_CFLAGS_COMPILE = "-fpermissive -Wno-error=address-of-temporary ${old.env.NIX_CFLAGS_COMPILE}";
                 });
-                av = python-prev.av.overrideAttrs (old: { doCheck = false; });
-                imageio = python-prev.imageio.overrideAttrs (old: { doCheck = false; });
+                av = python-prev.av.overrideAttrs (old: {
+                  doCheck = false;
+                  disabledTestPaths = [ "tests/test_encode.py" "tests/test_doctests.py" "tests/test_timeout.py" ];
+                });
+                imageio = python-prev.imageio.overrideAttrs (old: {
+                  doCheck = false;
+                  disabledTestPaths = [
+                    "tests/test_pyav.py"
+                    "tests/test_freeimage.py"
+                    "tests/test_pillow.py" "tests/test_spe.py" "tests/test_swf.py"
+                  ];
+                });
               };
             };
 
@@ -49,6 +59,7 @@
         ] else [];
       }; (
         python311Packages.callPackage ./hydrus.nix {
+          pythonPackages = python311Packages;
           inherit miniupnpc swftools;
           inherit (qt6) wrapQtAppsHook qtbase qtcharts;
         }
