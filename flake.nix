@@ -31,7 +31,7 @@
       );
       packages.hydrus = with import nixpkgs-unstable {
         inherit system;
-        overlays = [
+        overlays = if system == "aarch64-darwin" then [
           (final: prev: rec {
             python311 = prev.python311.override {
               packageOverrides = python-final: python-prev: {
@@ -45,7 +45,7 @@
 
             python311Packages = python311.pkgs;
           })
-        ];
+        ] else [];
       }; (
         python311Packages.callPackage ./hydrus.nix {
           inherit miniupnpc swftools;
