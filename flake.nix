@@ -29,7 +29,7 @@
       packages.monero-feather = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
         callPackage ./monero-feather.nix { }
       );
-      packages.hydrus = let pkgs = import nixpkgs-unstable {
+      packages.hydrus = with import nixpkgs-unstable {
         inherit system;
         overlays = [
           (final: prev: {
@@ -39,8 +39,8 @@
             });
           })
         ];
-      }; in with pkgs; (
-        python3Packages.callPackage ./hydrus.nix {
+      }; (
+        python311Packages.callPackage ./hydrus.nix {
           inherit miniupnpc swftools;
           inherit (qt6) wrapQtAppsHook qtbase qtcharts;
         }
