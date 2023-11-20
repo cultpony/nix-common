@@ -39,6 +39,7 @@
                   # fix build with qt 6.6
                   env.NIX_CFLAGS_COMPILE = "-fpermissive -Wno-error=address-of-temporary";
                 });
+                av = python-prev.av.overrideAttrs (old: { doCheck = false; });
               };
             };
 
