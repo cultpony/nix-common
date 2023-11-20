@@ -27,7 +27,7 @@
         callPackage ./mastodon-pkg/default.nix { }
       );
       packages.monero-feather = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
-        callPackage ./monero-feather.nix { }
+        qt6.callPackage ./monero-feather.nix { }
       );
       packages.hydrus = with import nixpkgs-unstable {
         inherit system;
@@ -64,12 +64,6 @@
           inherit (qt6) wrapQtAppsHook qtbase qtcharts;
         }
       );
-      /*packages.hydrus = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
-        python3Packages.callPackage ./hydrus.nix {
-          inherit miniupnpc swftools;
-          inherit (qt6) wrapQtAppsHook qtbase qtcharts;
-        }
-      );*/
   
       checks.test-hydrus = self.packages.${system}.hydrus;
       checks.monero-feather = self.packages.${system}.monero-feather;
