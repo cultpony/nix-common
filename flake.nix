@@ -40,6 +40,7 @@
                   env.NIX_CFLAGS_COMPILE = "-fpermissive -Wno-error=address-of-temporary ${old.env.NIX_CFLAGS_COMPILE}";
                 });
                 av = python-prev.av.overrideAttrs (old: { doCheck = false; });
+                imageio = python-prev.imageio.overrideAttrs (old: { doCheck = false; });
               };
             };
 
