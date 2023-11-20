@@ -32,7 +32,7 @@
       packages.hydrus = with import nixpkgs-unstable {
         inherit system;
         overlays = [
-          (final: prev: {
+          (final: prev: rec {
             python311 = prev.python311.override {
               packageOverrides = python-final: python-prev: {
                 pyqt6 = python-prev.pyqt6.overrideAttrs (old: {
