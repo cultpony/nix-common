@@ -29,12 +29,24 @@
       packages.monero-feather = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
         callPackage ./monero-feather.nix { }
       );
-      packages.hydrus = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
+      packages.hydrus = let pkgs = import nixpkgs-unstable {
+        inherit system;
+        overlays = [
+          (final: prev: {
+            python311Packages.pyqt6 = prev.python311Packages.pyqt6.overrideAttrs (old: {
+                # fix build with qt 6.6
+                env.NIX_CFLAGS_COMPILE = "-fpermissive";
+            });
+          })
+        ];
+      }; in with pkgs; (
+      );
+      /*packages.hydrus = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
         python3Packages.callPackage ./hydrus.nix {
           inherit miniupnpc swftools;
           inherit (qt6) wrapQtAppsHook qtbase qtcharts;
         }
-      );
+      );*/
   
       checks.test-hydrus = self.packages.${system}.hydrus;
       checks.monero-feather = self.packages.${system}.monero-feather;
