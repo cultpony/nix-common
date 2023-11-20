@@ -40,6 +40,10 @@
           })
         ];
       }; in with pkgs; (
+        python3Packages.callPackage ./hydrus.nix {
+          inherit miniupnpc swftools;
+          inherit (qt6) wrapQtAppsHook qtbase qtcharts;
+        }
       );
       /*packages.hydrus = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
         python3Packages.callPackage ./hydrus.nix {
