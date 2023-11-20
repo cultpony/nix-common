@@ -47,7 +47,7 @@
                   doCheck = false;
                   disabledTestPaths = [
                     "tests/test_pyav.py"
-                    "tests/test_freeimage.py"
+                    "tests/test_freeimage.py" "tests/test_ffmpeg.py"
                     "tests/test_pillow.py" "tests/test_spe.py" "tests/test_swf.py"
                   ];
                 });
