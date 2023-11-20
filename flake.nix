@@ -37,7 +37,7 @@
               packageOverrides = python-final: python-prev: {
                 pyqt6 = python-prev.pyqt6.overrideAttrs (old: {
                   # fix build with qt 6.6
-                  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+                  env.NIX_CFLAGS_COMPILE = "-fpermissive -Wno-error=address-of-temporary";
                 });
               };
             };
