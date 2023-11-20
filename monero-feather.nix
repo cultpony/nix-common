@@ -7,27 +7,27 @@
 , hidapi
 , pkg-config
 , protobuf
-, python310
+, system
 , boost
 , qrencode
 , qtbase
 , wrapQtAppsHook
 , libsodium
-, zxing-cpp
-, zip
-, zlib
 , qtsvg
 , qtmultimedia
 , qtwebsockets
 , libusb1
-, graphviz
 , tor
-, git
-, readline
 , protobufc
-, gettext
-, fetchurl
-, qtwayland, gnupg, expat, zeromq, zbar, libzip, libunwind, libudev0-shim, libgcrypt}:
+, qtwayland
+, gnupg
+, expat
+, zeromq
+, libzip
+, libunwind
+, libudev0-shim
+, libgcrypt
+}:
 stdenv.mkDerivation rec {
   name = "feather";
   version = "2.5.2";
@@ -63,7 +63,6 @@ stdenv.mkDerivation rec {
     qtsvg
     qtwebsockets
     qtmultimedia
-    qtwayland
 
     libgcrypt
     libsodium
@@ -76,7 +75,7 @@ stdenv.mkDerivation rec {
     protobuf
     qrencode
     zeromq
-  ];
+  ] ++ (if system != "aarch64-darwin" then [ qtwayland ] else []);
   runtimeInputs = [
     tor
   ];

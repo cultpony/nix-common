@@ -11,7 +11,7 @@
 
   outputs = inputs@ { self, systems, nixpkgs, nixpkgs-unstable, flake-utils, ... }: flake-utils.lib.eachDefaultSystem
     (system: {
-      devShells.default = (import nixpkgs rec {
+      devShells.default = (import nixpkgs {
         inherit system;
         config.allowUnfree = true;
       }).mkShell {
@@ -21,6 +21,7 @@
           inputs.zon2nix.packages.${system}.default
           nix-output-monitor
           zig
+          nix-tree
         ];
       };
       packages.mastodon = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
