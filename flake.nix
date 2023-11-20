@@ -33,10 +33,14 @@
         inherit system;
         overlays = [
           (final: prev: {
-            python311Packages.pyqt6 = prev.python311Packages.pyqt6.overrideAttrs (old: {
-                # fix build with qt 6.6
-                env.NIX_CFLAGS_COMPILE = "-fpermissive";
-            });
+            python311Packages = prev.python311Packages.override {
+              packageOverrides = python-self: python-super: {
+                pyqt6 = python-super.python311Packages.pyqt6.overrideAttrs (old: {
+                  # fix build with qt 6.6
+                  env.NIX_CFLAGS_COMPILE = "-fpermissive";
+                });
+              };
+            };
           })
         ];
       }; (
