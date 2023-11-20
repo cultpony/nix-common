@@ -35,7 +35,7 @@
           (final: prev: {
             pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
               (python-final: python-prev: {
-                pyqt6 = python-prev.python311Packages.pyqt6.overrideAttrs (old: {
+                pyqt6 = python-prev.pyqt6.overrideAttrs (old: {
                   # fix build with qt 6.6
                   env.NIX_CFLAGS_COMPILE = "-fpermissive";
                 });
