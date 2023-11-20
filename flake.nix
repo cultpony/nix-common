@@ -43,14 +43,6 @@
             };
 
             python311Packages = python311.pkgs;
-            pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
-              (python-final: python-prev: {
-                pyqt6 = python-prev.pyqt6.overrideAttrs (old: {
-                  # fix build with qt 6.6
-                  NIX_CFLAGS_COMPILE = "-fpermissive";
-                });
-              })
-            ];
           })
         ];
       }; (
