@@ -30,6 +30,39 @@
       packages.monero-feather = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
         qt6.callPackage ./monero-feather.nix { }
       );
+      packages.general-vscode = with import nixpkgs-unstable {
+        inherit system;
+        config.allowUnfree = true;
+      }; (
+        (vscode-with-extensions.override {
+          vscodeExtensions = with vscode-extensions; [
+            arrterian.nix-env-selector
+            bbenoist.nix
+            brettm12345.nixfmt-vscode
+            elixir-lsp.vscode-elixir-ls
+            github.codespaces
+            github.vscode-github-actions
+            github.vscode-github-actions
+            github.vscode-pull-request-github
+            gruntfuggly.todo-tree
+            jnoortheen.nix-ide
+            matklad.rust-analyzer
+            mkhl.direnv
+            ms-azuretools.vscode-docker
+            ms-dotnettools.csharp
+            ms-kubernetes-tools.vscode-kubernetes-tools
+            ms-vscode-remote.remote-containers
+            ms-vscode-remote.remote-ssh
+            ms-vscode-remote.remote-ssh
+            ms-vscode.hexeditor
+            serayuzgur.crates
+            shd101wyy.markdown-preview-enhanced
+            tamasfe.even-better-toml #bungcip.better-toml
+          ];
+        }).overrideAttrs (old: {
+          pname = "vscode";
+        })
+      );
       packages.hydrus = with import nixpkgs-unstable {
         inherit system;
         overlays = if system == "aarch64-darwin" || system == "x86_64-darwin" then [
