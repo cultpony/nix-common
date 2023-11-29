@@ -17,6 +17,7 @@
 , gcc-unwrapped
 , glibc
 , writeShellScriptBin
+, system
 
   # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon-pony-social"
@@ -51,13 +52,13 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  mastodonEmojiImporter = self.packages.mastodonEmojiImporter;
+  mastodonEmojiImporter = self.packages.${system}.mastodonEmojiImporter;
 
   mastodonModules = stdenv.mkDerivation {
     pname = "${pname}-modules";
     inherit src version;
 
-    yarnOfflineCache = self.packages.mastodonYarnCache;
+    yarnOfflineCache = self.packages.${system}.mastodonYarnCache;
 
     nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
 
