@@ -1,4 +1,5 @@
-{ lib
+{ self
+, lib
 , stdenv
 , nodejs-slim
 , bundlerEnv
@@ -11,7 +12,6 @@
 , ruby_3_2
 , writeShellScript
 , fetchYarnDeps
-, fetchFromGitHub
 , fixup_yarn_lock
 , brotli
 , gcc-unwrapped
@@ -21,7 +21,6 @@
   # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon-pony-social"
 , version ? import ./version.nix
-, srcOverride ? null
 , dependenciesDir ? ./.  # Should contain gemset.nix, yarn.nix and package.json.
 }:
 
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
 
   # Using overrideAttrs on src does not build the gems and modules with the overridden src.
   # Putting the callPackage up in the arguments list also does not work.
-  src = if srcOverride != null then srcOverride else callPackage ./source.nix { };
+  src = callPackage ./source.nix { };
 
   mastodonGems = bundlerEnv {
     name = "${pname}-gems-${version}";
@@ -52,21 +51,13 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  mastodonEmojiImporter = fetchFromGitHub {
-    owner = "impiaaa";
-    repo = "mastodon_import_emoji";
-    rev = "1862787c09d0806eea276978112e81a939270ff2";
-    hash = "sha256-fB7SUZVriSSAL6BmHVOhgNEf2vNKzbTZPMgQEIOnmY0=";
-  };
+  mastodonEmojiImporter = self.packages.mastodonEmojiImporter;
 
   mastodonModules = stdenv.mkDerivation {
     pname = "${pname}-modules";
     inherit src version;
 
-    yarnOfflineCache = fetchYarnDeps {
-      yarnLock = "${src}/yarn.lock";
-      hash = "sha256-pv05OTaRd0Dt/yW9Yxazn1iadcxjJu49i6SUAqmZJIU=";
-    };
+    yarnOfflineCache = self.packages.mastodonYarnCache;
 
     nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
 

@@ -6,4 +6,4 @@ cd $(dirname $(realpath -eP $0))
 
 nix-build --expr 'with import <nixpkgs-unstable> {}; callPackage ./update.nix {}'
 
-./result/bin/update.sh --url https://github.com/glitch-soc/mastodon --ver v4.2.1-glitch --rev "18eacc7a07233f39170a914fcf1806f4e9c3485b"
+./result/bin/update.sh --url https://github.com/glitch-soc/mastodon --ver v4.2.1-glitch --rev "660372d13069658f79da6fdf6b7f0e3e95dd7724"

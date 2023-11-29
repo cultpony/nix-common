@@ -20,12 +20,32 @@
           inputs.cachix.packages.${system}.default
           inputs.zon2nix.packages.${system}.default
           nix-output-monitor
+          nix-update
           zig
           nix-tree
+          (let
+            update-sh = callPackage ./mastodon-pkg/update.nix {};
+            repo = "https://github.com/glitch-soc/mastodon";
+            ver = "4.2.1-glitch";
+            rev = "660372d13069658f79da6fdf6b7f0e3e95dd7724";
+          in 
+            writeShellScriptBin ''mastodonUpdate.sh'' ''
+              set -euo pipefail
+              cd $(${git}/bin/git rev-parse --show-toplevel)/mastodon-pkg
+              export NIXPKGS=${nixpkgs-unstable}
+              ${update-sh}/bin/update.sh --url ${repo} --ver ${ver} --rev "${rev}"
+            ''
+          )
         ];
       };
       packages.mastodon = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
-        callPackage ./mastodon-pkg/default.nix { }
+        callPackage ./mastodon-pkg/default.nix { inherit self; }
+      );
+      packages.mastodonYarnCache = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
+        callPackage ./mastodon-pkg/yarnOfflineCache.nix { }
+      );
+      packages.mastodonEmojiImporter = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
+        callPackage ./mastodon-pkg/mastodonEmojiImporter.nix { }
       );
       packages.monero-feather = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
         qt6.callPackage ./monero-feather.nix { }
