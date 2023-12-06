@@ -26,8 +26,8 @@
           (let
             update-sh = callPackage ./mastodon-pkg/update.nix {};
             repo = "https://github.com/glitch-soc/mastodon";
-            ver = "4.2.1-glitch";
-            rev = "660372d13069658f79da6fdf6b7f0e3e95dd7724";
+            ver = "4.2.3-glitch";
+            rev = "9fcf5d41922f40a56f7da2174d0446580d249490";
           in 
             writeShellScriptBin ''mastodonUpdate.sh'' ''
               set -euo pipefail

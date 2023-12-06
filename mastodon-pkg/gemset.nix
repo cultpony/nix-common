@@ -1367,14 +1367,6 @@
     version = "2.6.3";
   };
   json-canonicalization = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "1rvsalsrs8njk2gqxgq0ydg5cd02jqdawskbq2ccz663qxz8wwq5";
-      type = "gem";
-    };
-    version = "0.3.2";
   };
   json-jwt = {
     dependencies = ["activesupport" "aes_key_wrap" "bindata" "httpclient"];
