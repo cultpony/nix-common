@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-czOlTulyzY/3npeOz9LhKlgFoh6kDfyTqTVvxv4CtVk=";
   };
   cmakeFlags = [
-    "-DTOR_DIR=${tor}/bin"
-    "-DTOR_VERSION=${tor.version}"
+    #"-DTOR_DIR=${tor}/bin"
+    #"-DTOR_VERSION=${tor.version}"
     "-DCHECK_UPDATES=OFF"
     "-DDONATE_BEG=OFF"
     "-DUSE_DEVICE_TREZOR=ON"
@@ -74,9 +74,9 @@ stdenv.mkDerivation rec {
     qrencode
     zeromq
   ] ++ (if system != "aarch64-darwin" then [ qtwayland ] else []);
-  runtimeInputs = [
-    tor
-  ];
+  #runtimeInputs = [
+  #  tor
+  #];
   nativeBuildInputs = [
     wrapQtAppsHook protobuf protobufc pkg-config
   ];
