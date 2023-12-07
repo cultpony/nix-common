@@ -21,8 +21,12 @@
 
   # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon-pony-social"
-, version ? import ./version.nix
+, srcOverride ? callPackage ./source.nix { inherit patches; }
+, patches ? []
+, version ? srcOverride.version
 , dependenciesDir ? ./.  # Should contain gemset.nix, yarn.nix and package.json.
+, gemset ? ./. + "/gemset.nix"
+, ruby ? ruby_3_2
 }:
 
 stdenv.mkDerivation rec {
@@ -30,14 +34,12 @@ stdenv.mkDerivation rec {
 
   # Using overrideAttrs on src does not build the gems and modules with the overridden src.
   # Putting the callPackage up in the arguments list also does not work.
-  src = callPackage ./source.nix { };
+  src = srcOverride;
 
   mastodonGems = bundlerEnv {
     name = "${pname}-gems-${version}";
-    inherit version;
-    ruby = ruby_3_2;
+    inherit version gemset ruby;
     gemdir = src;
-    gemset = dependenciesDir + "/gemset.nix";
     # This fix (copied from https://github.com/NixOS/nixpkgs/pull/76765) replaces the gem
     # symlinks with directories, resolving this error when running rake:
     #   /nix/store/451rhxkggw53h7253izpbq55nrhs7iv0-mastodon-gems-3.0.1/lib/ruby/gems/2.6.0/gems/bundler-1.17.3/lib/bundler/settings.rb:6:in `<module:Bundler>': uninitialized constant Bundler::Settings (NameError)
@@ -66,6 +68,8 @@ stdenv.mkDerivation rec {
     NODE_ENV = "production";
 
     buildPhase = ''
+      runHook preBuild
+      
       export HOME=$PWD
       # This option is needed for openssl-3 compatibility
       # Otherwise we encounter this upstream issue: https://github.com/mastodon/mastodon/issues/17924
@@ -93,20 +97,28 @@ stdenv.mkDerivation rec {
       brotli --best --keep ~/public/packs/report.html
       find ~/public/assets -type f -regextype posix-extended -iregex '.*\.(css|js|json|html)' \
         -exec brotli --best --keep {} ';'
+
+      runHook postBuild
     '';
 
     installPhase = ''
+      runHook preInstall
+      
       mkdir -p $out/public
       cp -r node_modules $out/node_modules
       cp -r public/assets $out/public
       cp -r public/packs $out/public
+
+      runHook postInstall
     '';
   };
 
-  propagatedBuildInputs = [ imagemagick ffmpeg file mastodonGems.wrappedRuby gcc-unwrapped.lib glibc ];
+  propagatedBuildInputs = [ imagemagick ffmpeg file mastodonGems.wrappedRuby ];
   buildInputs = [ mastodonGems nodejs-slim ];
 
   buildPhase = ''
+    runHook preBuild
+    
     ln -s $mastodonModules/node_modules node_modules
     ln -s $mastodonModules/public/assets public/assets
     ln -s $mastodonModules/public/packs public/packs
@@ -139,6 +151,8 @@ stdenv.mkDerivation rec {
     rm -rf log
     ln -s /var/log/mastodon log
     ln -s /tmp tmp
+
+    runHook postBuild
   '';
 
   importEmojiScript = writeShellScriptBin "import_emoji.sh" ''
@@ -155,11 +169,15 @@ stdenv.mkDerivation rec {
       '';
     in
     ''
+      runHook preInstall
+      
       mkdir -p $out
       cp -r * $out/
       cp ${mastodonEmojiImporter}/import_emoji.rb $out/import_emoji.rb
       ln -s ${importEmojiScript}/bin/import_emoji.sh $out/bin/import_emoji.sh
       ln -s ${run-streaming} $out/run-streaming.sh
+
+      runHook postInstall
     '';
 
   passthru = {

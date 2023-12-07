@@ -24,8 +24,8 @@
           zig
           nix-tree
           (let
-            update-sh = callPackage ./mastodon-pkg/update.nix {};
-            repo = "https://github.com/glitch-soc/mastodon";
+            owner = "glitch-soc";
+            repo = "mastodon";
             ver = "4.2.3-glitch";
             rev = "9fcf5d41922f40a56f7da2174d0446580d249490";
           in 
@@ -33,7 +33,7 @@
               set -euo pipefail
               cd $(${git}/bin/git rev-parse --show-toplevel)/mastodon-pkg
               export NIXPKGS=${nixpkgs-unstable}
-              ${update-sh}/bin/update.sh --url ${repo} --ver ${ver} --rev "${rev}"
+              ./update.sh --owner "${owner}" --repo "${repo}" --ver "${ver}" --rev "${rev}"
             ''
           )
         ];
