@@ -22,7 +22,7 @@
   # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon-pony-social"
 , patches ? []
-, version ? srcOverride.version
+, version ? self.packages.${system}.mastodonSrc.version
 , dependenciesDir ? ./.  # Should contain gemset.nix, yarn.nix and package.json.
 , gemset ? ./. + "/gemset.nix"
 , ruby ? ruby_3_2

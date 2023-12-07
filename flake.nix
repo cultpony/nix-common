@@ -45,7 +45,6 @@
       packages.mastodon = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
         callPackage ./mastodon-pkg/default.nix { inherit self; }
       );
-      packages.mastodonGemSet = ./mastodon-pkg/gemset.nix;
       packages.mastodonYarnCache = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
         callPackage ./mastodon-pkg/yarnOfflineCache.nix { inherit self; }
       );
@@ -133,6 +132,7 @@
   }) //
   {
     lib = {
+      mastodonGemSet = import ./mastodon-pkg/gemset.nix;
       cachix = import ./cachix.nix;
       cultpony_ssh_keys = import ./cultpony_ssh_keys.nix;
       common_setup = import ./common_setup.nix;
