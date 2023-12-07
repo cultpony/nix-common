@@ -92,7 +92,7 @@ cat > source.nix << EOF
     };
     patches = patches ++ [$PATCHES];
   }) // {
-  version = "$REVISION";
+  version = "$VERSION";
   yarnHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
 }
 EOF

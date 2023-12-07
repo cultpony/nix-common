@@ -5,11 +5,11 @@
     src = fetchFromGitHub {
       owner = "glitch-soc";
       repo = "mastodon";
-      rev = "9fcf5d41922f40a56f7da2174d0446580d249490";
-      hash = "sha256-gxuI13PkNTRFhq8aQqmRBCicfS4mAOuEzb9dEdfRJVk=";
+      rev = "c0e562916cce3241d98bd10f04a6aa7419700605";
+      hash = "sha256-fZH3zPEU5jnYFhLx8OKDNrvsSVT46Peu92L84Fg5YpQ=";
     };
     patches = patches ++ [];
   }) // {
-  version = "9fcf5d41922f40a56f7da2174d0446580d249490";
+  version = "4.2.3-glitch";
   yarnHash = "sha256-P7KswzsCusyiS4MxUFnC1HYMTQ6fLpIwd97AglCukIk=";
 }

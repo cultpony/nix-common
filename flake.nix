@@ -23,11 +23,12 @@
           nix-update
           zig
           nix-tree
+          nixpkgs-fmt
           (let
             owner = "glitch-soc";
             repo = "mastodon";
             ver = "4.2.3-glitch";
-            rev = "9fcf5d41922f40a56f7da2174d0446580d249490";
+            rev = "c0e562916cce3241d98bd10f04a6aa7419700605";
           in 
             writeShellScriptBin ''mastodonUpdate.sh'' ''
               set -euo pipefail
@@ -38,14 +39,21 @@
           )
         ];
       };
+      packages.mastodonSrc = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
+        callPackage ./mastodon-pkg/source.nix { }
+      );
       packages.mastodon = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
         callPackage ./mastodon-pkg/default.nix { inherit self; }
       );
+      packages.mastodonGemSet = ./mastodon-pkg/gemset.nix;
       packages.mastodonYarnCache = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
-        callPackage ./mastodon-pkg/yarnOfflineCache.nix { }
+        callPackage ./mastodon-pkg/yarnOfflineCache.nix { inherit self; }
       );
       packages.mastodonEmojiImporter = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
         callPackage ./mastodon-pkg/mastodonEmojiImporter.nix { }
+      );
+      packages.mastodonGems = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
+        callPackage ./mastodon-pkg/bundlerEnv.nix { inherit self; }
       );
       packages.monero-feather = let pkgs = nixpkgs.legacyPackages.${system}; in with pkgs; (
         qt6.callPackage ./monero-feather.nix { }
