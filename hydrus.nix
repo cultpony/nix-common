@@ -15,14 +15,14 @@ let
 in
 pythonVPackages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "552a";
+  version = "559";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Mb6/pmbn1Qwid5kOCMzqg0GJAK8/DdGbqkDh8kHJt7U=";
+    hash = "sha256-+aYrqt1sifCe6/qS4kZyx0CLSHEoutFk6cyxmOXmN7Q=";
   };
 
   patches = [
