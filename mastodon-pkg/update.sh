@@ -76,7 +76,11 @@ trap cleanup EXIT
 
 echo "Fetching source code $REVISION"
 JSON=$(nix-prefetch-github "$OWNER" "$REPO" --rev "$REVISION" 2> $WORK_DIR/nix-prefetch-git.out)
+echo "$JSON"
 HASH=$(echo "$JSON" | jq -r .hash)
+if [ "$HASH" == "null" ]; then
+  HASH=""
+fi
 
 echo "Generating source.nix"
 cat > source.nix << EOF

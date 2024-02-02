@@ -5,11 +5,11 @@
     src = fetchFromGitHub {
       owner = "glitch-soc";
       repo = "mastodon";
-      rev = "c0e562916cce3241d98bd10f04a6aa7419700605";
-      hash = "sha256-fZH3zPEU5jnYFhLx8OKDNrvsSVT46Peu92L84Fg5YpQ=";
+      rev = "14e49e5e365057b5870a8ba4190ae11660c3ec8c";
+      hash = "sha256-zCRpmqvnHX1HSb973jSwKO10uuVyMVMJpA+xC8zj9f4=";
     };
-    patches = patches ++ [];
+    patches = patches ++ [../mastodon-pre-cve1.patch ../mastodon-cve.patch];
   }) // {
-  version = "4.2.3-glitch";
-  yarnHash = "sha256-P7KswzsCusyiS4MxUFnC1HYMTQ6fLpIwd97AglCukIk=";
+  version = "4.2.3-glitch-patched";
+  yarnHash = "sha256-c7hbwSr4zi3tG69haX8zahTa/szCM2w/JGTxpA/H1v0=";
 }

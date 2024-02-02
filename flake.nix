@@ -24,17 +24,18 @@
           zig
           nix-tree
           nixpkgs-fmt
+          python310Packages.nix-prefetch-github
           (let
             owner = "glitch-soc";
             repo = "mastodon";
-            ver = "4.2.3-glitch";
-            rev = "c0e562916cce3241d98bd10f04a6aa7419700605";
+            ver = "4.2.3-glitch-patched";
+            rev = "14e49e5e365057b5870a8ba4190ae11660c3ec8c";
           in 
             writeShellScriptBin ''mastodonUpdate.sh'' ''
               set -euo pipefail
               cd $(${git}/bin/git rev-parse --show-toplevel)/mastodon-pkg
               export NIXPKGS=${nixpkgs-unstable}
-              ./update.sh --owner "${owner}" --repo "${repo}" --ver "${ver}" --rev "${rev}"
+              ./update.sh --owner "${owner}" --repo "${repo}" --ver "${ver}" --rev "${rev}" --patches "../mastodon-pre-cve1.patch ../mastodon-cve.patch"
             ''
           )
         ];
