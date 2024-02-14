@@ -17,6 +17,7 @@
 , gcc-unwrapped
 , glibc
 , writeShellScriptBin
+, yarn-berry
 , system
 
   # Allow building a fork or custom version of Mastodon:
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
 
     yarnOfflineCache = self.packages.${system}.mastodonYarnCache;
 
-    nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
+    nativeBuildInputs = [ yarn-berry nodejs-slim mastodonGems mastodonGems.wrappedRuby brotli ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
@@ -57,9 +58,12 @@ stdenv.mkDerivation rec {
       # This option is needed for openssl-3 compatibility
       # Otherwise we encounter this upstream issue: https://github.com/mastodon/mastodon/issues/17924
       export NODE_OPTIONS=--openssl-legacy-provider
-      fixup_yarn_lock ~/yarn.lock
-      yarn config --offline set yarn-offline-mirror $yarnOfflineCache
-      yarn install --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress
+      
+      export YARN_ENABLE_TELEMETRY=0
+      mkdir -p ~/.yarn/berry
+      ln -sf $yarnOfflineCache ~/.yarn/berry/cache
+
+      yarn install --immutable --immutable-cache
 
       patchShebangs ~/bin
       patchShebangs ~/node_modules
@@ -69,7 +73,7 @@ stdenv.mkDerivation rec {
 
       OTP_SECRET=precompile_placeholder SECRET_KEY_BASE=precompile_placeholder \
         rails assets:precompile
-      yarn cache clean --offline
+      yarn cache clean
       rm -rf ~/node_modules/.cache
 
       # Create missing static gzip and brotli files
