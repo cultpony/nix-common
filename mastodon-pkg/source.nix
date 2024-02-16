@@ -5,8 +5,8 @@
     src = fetchFromGitHub {
       owner = "glitch-soc";
       repo = "mastodon";
-      rev = "e7ca82762dbcbf3d304437a91778f377e6739980";
-      hash = "sha256-HsX2gAYanza1WQvsMy3bMhTC7Wl34M5EE7AMb6cH4OU=";
+      rev = "d7d477047eba7cb88df54dd78f42095ed0fbea76";
+      hash = "sha256-x1fqDtCOiNS61EhnpObUuxrdTd5n2mhjoGbIYGivbDg=";
     };
     patches = patches ++ [../patches/0002-yarn-typescript.patch];
   }) // {

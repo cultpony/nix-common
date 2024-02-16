@@ -29,7 +29,7 @@
             owner = "glitch-soc";
             repo = "mastodon";
             ver = "4.2.3-glitch-patched";
-            rev = "e7ca82762dbcbf3d304437a91778f377e6739980";
+            rev = "d7d477047eba7cb88df54dd78f42095ed0fbea76";
           in 
             writeShellScriptBin ''mastodonUpdate.sh'' ''
               set -euo pipefail
