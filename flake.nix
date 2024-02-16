@@ -29,13 +29,13 @@
             owner = "glitch-soc";
             repo = "mastodon";
             ver = "4.2.3-glitch-patched";
-            rev = "486e4bc7d3d3dd0c61de2eb316db841a222e36bf";
+            rev = "e7ca82762dbcbf3d304437a91778f377e6739980";
           in 
             writeShellScriptBin ''mastodonUpdate.sh'' ''
               set -euo pipefail
               cd $(${git}/bin/git rev-parse --show-toplevel)/mastodon-pkg
               export NIXPKGS=${nixpkgs-unstable}
-              ./update.sh --owner "${owner}" --repo "${repo}" --ver "${ver}" --rev "${rev}"
+              ./update.sh --owner "${owner}" --repo "${repo}" --ver "${ver}" --rev "${rev}" \
                --patches ../patches/0002-yarn-typescript.patch
               # --patches "../mastodon-pre-cve1.patch ../mastodon-cve.patch"
             ''

@@ -5,10 +5,10 @@
     src = fetchFromGitHub {
       owner = "glitch-soc";
       repo = "mastodon";
-      rev = "486e4bc7d3d3dd0c61de2eb316db841a222e36bf";
-      hash = "sha256-6awTDClg3alks/H+tEI7uf942B20uHRb3n9JsQxTy40=";
+      rev = "e7ca82762dbcbf3d304437a91778f377e6739980";
+      hash = "sha256-HsX2gAYanza1WQvsMy3bMhTC7Wl34M5EE7AMb6cH4OU=";
     };
-    patches = patches ++ [ ../patches/0002-yarn-typescript.patch ];
+    patches = patches ++ [../patches/0002-yarn-typescript.patch];
   }) // {
   version = "4.2.3-glitch-patched";
   yarnHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
