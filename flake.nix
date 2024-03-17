@@ -29,14 +29,14 @@
             owner = "glitch-soc";
             repo = "mastodon";
             ver = "4.2.3-glitch-patched";
-            rev = "d7d477047eba7cb88df54dd78f42095ed0fbea76";
+            rev = "ada2ac411a6bb46be1342af4fd53d834153cd203";
           in 
             writeShellScriptBin ''mastodonUpdate.sh'' ''
               set -euo pipefail
               cd $(${git}/bin/git rev-parse --show-toplevel)/mastodon-pkg
               export NIXPKGS=${nixpkgs-unstable}
-              ./update.sh --owner "${owner}" --repo "${repo}" --ver "${ver}" --rev "${rev}" \
-               --patches ../patches/0002-yarn-typescript.patch
+              ./update.sh --owner "${owner}" --repo "${repo}" --ver "${ver}" --rev "${rev}"
+              # --patches ../patches/0002-yarn-typescript.patch
               # --patches "../mastodon-pre-cve1.patch ../mastodon-cve.patch"
             ''
           )
@@ -49,7 +49,7 @@
         callPackage ./mastodon-pkg/default.nix { inherit self; }
       );
       packages.mastodonYarnCache = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
-        callPackage ./mastodon-pkg/yarnOfflineCache.nix { inherit self; hash = "sha256-CIIz5wwWzvDKc/VbSIT7Z5D9kwOLoErXoO0WQWfV/g4="; }
+        callPackage ./mastodon-pkg/yarnOfflineCache.nix { inherit self; hash = "sha256-sPdBzV4vpN7m7yMm4t2/xCXN3rLI7PIRwrEWF26FTAk="; }
       );
       packages.mastodonEmojiImporter = let pkgs = nixpkgs-unstable.legacyPackages.${system}; in with pkgs; (
         callPackage ./mastodon-pkg/mastodonEmojiImporter.nix { }
