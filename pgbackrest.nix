@@ -37,9 +37,12 @@
   ];
 
   services.cron.systemCronJobs = [
-    "30 06 * * 0    postgres  ${pkgs.pgbackrest}/bin/pgbackrest --type=full --stanza=${stanza} backup ${if extra_include_path != null then "--config-include-path=${extra_include_path}" else ""}"
-    "30 06 * * 1-6  postgres  ${pkgs.pgbackrest}/bin/pgbackrest --type=diff --stanza=${stanza} backup ${if extra_include_path != null then "--config-include-path=${extra_include_path}" else ""}"
-  ];
+    "30 06 * * 0    postgres  ${pkgs.pgbackrest}/bin/pgbackrest --type=full --repo=1 --stanza=${stanza} backup ${if extra_include_path != null then "--config-include-path=${extra_include_path}" else ""}"
+    "30 06 * * 1-6  postgres  ${pkgs.pgbackrest}/bin/pgbackrest --type=diff --repo=1 --stanza=${stanza} backup ${if extra_include_path != null then "--config-include-path=${extra_include_path}" else ""}"
+  ] ++ (if extra_include_path != null then [
+    "30 04 * * 0    postgres  ${pkgs.pgbackrest}/bin/pgbackrest --type=full --repo=2 --stanza=${stanza} backup ${if extra_include_path != null then "--config-include-path=${extra_include_path}" else ""}"
+    "30 04 * * 1-6  postgres  ${pkgs.pgbackrest}/bin/pgbackrest --type=diff --repo=2 --stanza=${stanza} backup ${if extra_include_path != null then "--config-include-path=${extra_include_path}" else ""}"
+  ] else []);
 
   environment.systemPackages = with pkgs; [ pgbackrest ];
 
