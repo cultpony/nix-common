@@ -3,6 +3,7 @@
 , backup_source ? config.services.postgresql.dataDir
 , backup_repo ? "/var/lib/pgbackrest"
 , stanza ? "localdb"
+, extra_include_path ? ""
 , ... 
 }:
 {
@@ -36,8 +37,8 @@
   ];
 
   services.cron.systemCronJobs = [
-    "30 06 * * 0    postgres  ${pkgs.pgbackrest}/bin/pgbackrest --type=full --stanza=${stanza} backup"
-    "30 06 * * 1-6  postgres  ${pkgs.pgbackrest}/bin/pgbackrest --type=diff --stanza=${stanza} backup"
+    "30 06 * * 0    postgres  ${pkgs.pgbackrest}/bin/pgbackrest --type=full --stanza=${stanza} backup ${if extra_include_path != null then "--config-include-path=${extra_include_path}" else ""}"
+    "30 06 * * 1-6  postgres  ${pkgs.pgbackrest}/bin/pgbackrest --type=diff --stanza=${stanza} backup ${if extra_include_path != null then "--config-include-path=${extra_include_path}" else ""}"
   ];
 
   environment.systemPackages = with pkgs; [ pgbackrest ];
