@@ -3,7 +3,7 @@
 , backup_source ? config.services.postgresql.dataDir
 , backup_repo ? "/var/lib/pgbackrest"
 , stanza ? "localdb"
-, extra_include_path ? ""
+, extra_include_path ? null
 , ... 
 }:
 {
