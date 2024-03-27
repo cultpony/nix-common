@@ -45,7 +45,7 @@
 
   services.postgresql.settings = {
     archive_mode = "on";
-    archive_command = "${pkgs.pgbackrest}/bin/pgbackrest --stanza=${stanza} archive-push %p";
+    archive_command = "${pkgs.pgbackrest}/bin/pgbackrest --stanza=${stanza} ${if extra_include_path != null then "--config-include-path=${extra_include_path}" else ""} archive-push %p";
     max_wal_senders = 3;
     wal_level = "replica";
   };
