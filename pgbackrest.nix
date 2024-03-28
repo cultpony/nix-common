@@ -16,10 +16,11 @@
 
       [global]
       repo1-path=${backup_repo}
-      repo1-retention-full=2
-      repo1-retention-diff=4
+      repo1-retention-full=1
+      repo1-retention-diff=2
       repo1-retention-history=120
       archive-async=y
+      process-max=4
       spool-path=/var/spool/pgbackrest
       compress-level=10
       compress-type=zst
