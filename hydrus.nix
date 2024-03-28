@@ -1,19 +1,8 @@
-{ lib
-, fetchFromGitHub
-, wrapQtAppsHook
-, miniupnpc
-, ffmpeg
-, enableSwftools ? false
-, swftools
-, pythonPackages
-, qtbase
-, qtcharts
-}:
+{ lib, fetchFromGitHub, wrapQtAppsHook, miniupnpc, ffmpeg
+, enableSwftools ? false, swftools, pythonPackages, qtbase, qtcharts }:
 
-let
-  pythonVPackages = pythonPackages;
-in
-pythonVPackages.buildPythonPackage rec {
+let pythonVPackages = pythonPackages;
+in pythonVPackages.buildPythonPackage rec {
   pname = "hydrus";
   version = "564";
   format = "other";
@@ -30,15 +19,9 @@ pythonVPackages.buildPythonPackage rec {
     ./patches/0001-inform-nixpkgs.patch
   ];
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-    pythonVPackages.mkdocs-material
-  ];
+  nativeBuildInputs = [ wrapQtAppsHook pythonVPackages.mkdocs-material ];
 
-  buildInputs = [
-    qtbase
-    qtcharts
-  ];
+  buildInputs = [ qtbase qtcharts ];
 
   propagatedBuildInputs = with pythonVPackages; [
     beautifulsoup4
@@ -61,7 +44,7 @@ pythonVPackages.buildPythonPackage rec {
     pyqt6-charts
     pysocks
     python-dateutil
-    pythonVPackages.mpv
+    #pythonVPackages.mpv
     pyyaml
     qtpy
     requests
@@ -70,11 +53,7 @@ pythonVPackages.buildPythonPackage rec {
     twisted
   ];
 
-  nativeCheckInputs = with pythonVPackages; [
-    nose
-    mock
-    httmock
-  ];
+  nativeCheckInputs = with pythonVPackages; [ nose mock httmock ];
 
   # most tests are failing, presumably because we are not using test.py
   checkPhase = ''
@@ -136,7 +115,8 @@ pythonVPackages.buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Danbooru-like image tagging and searching system for the desktop";
+    description =
+      "Danbooru-like image tagging and searching system for the desktop";
     license = licenses.wtfpl;
     homepage = "https://hydrusnetwork.github.io/hydrus/";
     maintainers = with maintainers; [ dandellion evanjs ];
