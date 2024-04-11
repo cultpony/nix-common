@@ -19,9 +19,6 @@
         pkgs-unstable = import nixpkgs-unstable {
           inherit system;
           overlays = [
-              (final: prev: {
-                xz = pkgs.xz;
-              })
             ];
         };
       in {
