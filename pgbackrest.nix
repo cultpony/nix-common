@@ -26,7 +26,7 @@
       compress-type=zst
 
       [global:archive-push]
-      compress-level=15
+      compress-level=10
       compress-type=zst
     '';
   };
