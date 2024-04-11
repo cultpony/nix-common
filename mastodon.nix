@@ -181,6 +181,9 @@ rec {
     # All below should try to add up to 16G
     "system-ponysocial-sidekiq" = {
       sliceConfig = {
+        CPUAccounting = true;
+        # max out sidekiq when it's using 80% of the CPU time available
+        CPUWeight = "80";
         MemoryAccounting = true;
         MemoryMax = "8G";
       };
