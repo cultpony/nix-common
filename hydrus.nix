@@ -44,6 +44,7 @@ in pythonVPackages.buildPythonPackage rec {
     pyqt6-charts
     pysocks
     python-dateutil
+    mpv
     #pythonVPackages.mpv
     pyyaml
     qtpy
