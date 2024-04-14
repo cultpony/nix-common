@@ -4,14 +4,14 @@
 let pythonVPackages = pythonPackages;
 in pythonVPackages.buildPythonPackage rec {
   pname = "hydrus";
-  version = "564";
+  version = "570";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "hydrusnetwork";
     repo = "hydrus";
     rev = "refs/tags/v${version}";
-    hash = "sha256-U2Z04bFrSJBCk6RwLcKr/x+Pia9V5UHjpUi8AzaCf9o=";
+    hash = "sha256-a3l/ZlbNBp5C2DThdQuH/6uHPcWPqkJqGXe6Q2imJRI=";
   };
 
   patches = [
