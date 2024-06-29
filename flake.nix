@@ -137,7 +137,7 @@
                 github.vscode-pull-request-github
                 gruntfuggly.todo-tree
                 jnoortheen.nix-ide
-                matklad.rust-analyzer
+                rust-lang.rust-analyzer
                 mkhl.direnv
                 ms-azuretools.vscode-docker
                 ms-dotnettools.csharp
