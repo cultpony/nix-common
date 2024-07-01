@@ -113,6 +113,7 @@ args@{ config
       PermitRootLogin = "prohibit-password";
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
+      LoginGraceTime = 0;
     };
     extraConfig = ''
       AllowTcpForwarding yes
@@ -120,7 +121,6 @@ args@{ config
       AllowAgentForwarding yes
       AllowStreamLocalForwarding no
       AuthenticationMethods publickey
-      LoginGraceTime 0
     '';
   });
 
