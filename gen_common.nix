@@ -106,6 +106,7 @@ args@{ config
       AllowAgentForwarding yes
       AllowStreamLocalForwarding no
       AuthenticationMethods publickey
+      LoginGraceTime 0
     '';
   } else {
     settings = {
@@ -119,6 +120,7 @@ args@{ config
       AllowAgentForwarding yes
       AllowStreamLocalForwarding no
       AuthenticationMethods publickey
+      LoginGraceTime 0
     '';
   });
 
